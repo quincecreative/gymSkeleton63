@@ -297,7 +297,7 @@
             meshes[0].receiveShadows = true;
             meshes[0].position.y = 30;
             console.log(meshes);
-            traka = meshes;
+            traka = [meshes[6], meshes[7], meshes[8]];
           }
         );
         BABYLON.SceneLoader.ImportMesh(
@@ -313,12 +313,40 @@
             meshes[0].rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
           }
         );
-
         let t = 0;
+
         scene.onBeforeRenderObservable.add(() => {
           t++;
-          if (traka != null) {
+          if (traka != null && skelleton != null && body != null) {
             traka[1].material._metallicTexture.vOffset += 0.01;
+
+            if (
+              orbitCamera.position.x < 476 &&
+              orbitCamera.position.x > -480 &&
+              orbitCamera.position.z < -48
+            ) {
+              for (let i = 0; i < traka.length; i++) {
+                traka[i].renderingGroupId = 1;
+              }
+
+              for (let i = 0; i < skelleton.length; i++) {
+                skelleton[i].renderingGroupId = 3;
+              }
+              for (let i = 0; i < body.length; i++) {
+                body[i].renderingGroupId = 2;
+              }
+            } else {
+              for (let i = 0; i < traka.length; i++) {
+                traka[i].renderingGroupId = 3;
+              }
+
+              for (let i = 0; i < skelleton.length; i++) {
+                skelleton[i].renderingGroupId = 2;
+              }
+              for (let i = 0; i < body.length; i++) {
+                body[i].renderingGroupId = 1;
+              }
+            }
           }
         });
 
